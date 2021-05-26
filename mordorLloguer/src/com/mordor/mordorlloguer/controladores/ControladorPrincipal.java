@@ -35,19 +35,18 @@ public class ControladorPrincipal implements ActionListener {
 	public ControladorPrincipal(VistaPrincipal vista, AlmacenDatosDB modelo) {
 		super();
 
-		
 		this.vista = vista;
-		
+
 		vistaLogin = new VistaLogin();
-		
+
 		this.modelo = modelo;
-		
+
 		vistaPreferencias = new VistaPreferencias();
-		
+
 		desktopPane = vista.getDesktopPane();
-		
+
 		frameEmpleados = new FrameEmpleados();
-		
+
 		cEmpleados = new ControladorEmpleados(frameEmpleados);
 
 		inicializar();
@@ -106,51 +105,49 @@ public class ControladorPrincipal implements ActionListener {
 			inicioSesion();
 		} else if (comando.equals("preferences")) {
 			preferencias();
-		} else if(comando.equals("SaveProperties")){
+		} else if (comando.equals("SaveProperties")) {
 			saveProperties();
-		} else if(comando.equals("Cancel properties")) {
+		} else if (comando.equals("Cancel properties")) {
 			cancelProperties();
 		}
-		
 
 	}
 
 	private void cancelProperties() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private void saveProperties() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private void preferencias() {
-		
-		
+
 		addJInternalFrame(vistaPreferencias);
 	}
 
 	private void inicioSesion() {
-		
+
 		SwingWorker<Boolean, Void> task = new SwingWorker<Boolean, Void>() {
-			
+
 			String user = vistaLogin.getTxtFieldUsuario().getText();
-			
+
 			char[] passwordChar = vistaLogin.getPasswordField().getPassword();
-			
+
 			String password = "";
 
 			@Override
 			protected Boolean doInBackground() throws Exception {
-			
+
 				for (int i = 0; i < passwordChar.length; i++) {
-				
+
 					password += passwordChar[i];
 				}
-				
+
 				Boolean login = modelo.authenticate(user, password);
-				
+
 				vistaLogin.getProgressBar().setVisible(true);
 
 				return login;
@@ -158,28 +155,28 @@ public class ControladorPrincipal implements ActionListener {
 
 			@Override
 			protected void done() {
-				
+
 				vistaLogin.getProgressBar().setVisible(false);
-				
+
 				Boolean logueado;
-				
+
 				try {
 					logueado = get();
-				
+
 					if (logueado) {
-					
+
 						vistaLogin.dispose();
-						
+
 						vista.getBtnLogout().setEnabled(true);
-						
+
 						vista.getBtnEmpleado().setEnabled(true);
-						
+
 						vista.getBtnLogin().setEnabled(false);
-						
+
 						JOptionPane.showMessageDialog(vista, "Sesion iniciada correctamente", "Tu cuenta",
 								JOptionPane.INFORMATION_MESSAGE);
 					} else {
-						
+
 						JOptionPane.showMessageDialog(vista, "Usuario o contraseña incorrectos",
 								"Error al iniciar sesion", JOptionPane.ERROR_MESSAGE);
 					}
@@ -197,13 +194,13 @@ public class ControladorPrincipal implements ActionListener {
 	}
 
 	private void logout() {
-		
+
 		vista.getBtnLogout().setEnabled(false);
-		
+
 		vista.getBtnLogin().setEnabled(true);
-		
+
 		vista.getBtnEmpleado().setEnabled(false);
-		
+
 		JOptionPane.showMessageDialog(vista, "Sesion cerrada", "", JOptionPane.INFORMATION_MESSAGE);
 
 	}
@@ -211,26 +208,26 @@ public class ControladorPrincipal implements ActionListener {
 	private void login() {
 
 		vista.getDesktopPane().add(vistaLogin);
-		
+
 		vistaLogin.setVisible(true);
 	}
 
 	private void empleados() {
-		
+
 		vista.getDesktopPane().add(frameEmpleados);
-		
+
 		frameEmpleados.setVisible(true);
 
 	}
 
 	static void addJInternalFrame(JInternalFrame jif) {
-		
+
 		desktopPane.add(jif);
-		
+
 		centrar(jif);
-		
+
 		jif.setVisible(true);
-		
+
 		try {
 			jif.setSelected(true);
 		} catch (PropertyVetoException e) {
@@ -240,27 +237,32 @@ public class ControladorPrincipal implements ActionListener {
 	}
 
 	static boolean isOpen(JInternalFrame jif) {
-		
+
 		boolean existe = false;
-		
+
 		JInternalFrame[] frames = desktopPane.getAllFrames();
-		
+
 		for (JInternalFrame frame : frames)
-			
+
 			if (frame == jif)
-				
+
 				existe = true;
-		
+
 		return existe;
 
 	}
 
+	public static java.sql.Date convert(java.util.Date uDate) {
+		java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+		return sDate;
+	}
+
 	static void centrar(JInternalFrame jif) {
-		
+
 		Dimension deskSize = desktopPane.getSize();
-		
+
 		Dimension ifSize = jif.getSize();
-		
+
 		jif.setLocation((deskSize.width - ifSize.width) / 2, (deskSize.height - ifSize.height) / 2);
 	}
 }

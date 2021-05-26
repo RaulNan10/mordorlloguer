@@ -7,7 +7,13 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import com.alee.extended.date.WebDateField;
+
 import javax.swing.JTextField;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JButton;
+import javax.swing.JPasswordField;
 
 public class VistaAnyadirEmpleado extends JInternalFrame {
 	private JTextField textFieldDNI;
@@ -16,9 +22,11 @@ public class VistaAnyadirEmpleado extends JInternalFrame {
 	private JTextField textFieldDireccion;
 	private JTextField textFieldCP;
 	private JTextField textFieldEmail;
-	private JTextField textFieldNacimiento;
 	private JTextField textFieldCargo;
-	private JTextField textFieldContraseña;
+	private WebDateField datePicker; 
+	private JTextField textFieldFecha;
+	private JPasswordField passwordField;
+	private JButton btnAdd;
 
 	/**
 	 * Launch the application.
@@ -40,21 +48,22 @@ public class VistaAnyadirEmpleado extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public VistaAnyadirEmpleado() {
+		setClosable(true);
 		setBounds(100, 100, 342, 409);
 		
 		JLabel lblEmpleado = new JLabel("Empleado");
 		
-		JLabel lblDni = new JLabel("DNI");
+		JLabel lblDni = new JLabel("DNI*");
 		
 		textFieldDNI = new JTextField();
 		textFieldDNI.setColumns(10);
 		
-		JLabel lblNombre = new JLabel("Nombre");
+		JLabel lblNombre = new JLabel("Nombre*");
 		
 		textFieldNombre = new JTextField();
 		textFieldNombre.setColumns(10);
 		
-		JLabel lblApellidos = new JLabel("Apellidos");
+		JLabel lblApellidos = new JLabel("Apellidos*");
 		
 		textFieldApellidos = new JTextField();
 		textFieldApellidos.setColumns(10);
@@ -69,103 +78,101 @@ public class VistaAnyadirEmpleado extends JInternalFrame {
 		textFieldCP = new JTextField();
 		textFieldCP.setColumns(10);
 		
-		JLabel lblNewLabel = new JLabel("Email");
+		JLabel lblNewLabel = new JLabel("Email*");
 		
 		textFieldEmail = new JTextField();
 		textFieldEmail.setColumns(10);
 		
-		JLabel lblNacimiento = new JLabel("Nacimiento");
+		JLabel lblNacimiento = new JLabel("Nacimiento*");
+		datePicker = new WebDateField();
 		
-		textFieldNacimiento = new JTextField();
-		textFieldNacimiento.setColumns(10);
-		
-		JLabel lblCargo = new JLabel("Cargo");
+		JLabel lblCargo = new JLabel("Cargo*");
 		
 		textFieldCargo = new JTextField();
 		textFieldCargo.setColumns(10);
 		
-		JLabel lblContrasea = new JLabel("Contraseña");
+		JLabel lblContrasea = new JLabel("Contraseña*");
 		
-		textFieldContraseña = new JTextField();
-		textFieldContraseña.setColumns(10);
-		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-							.addComponent(lblEmpleado)
-							.addGap(126))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblContrasea)
-								.addComponent(lblNacimiento)
-								.addComponent(lblCargo)
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-									.addComponent(lblDireccion)
-									.addComponent(lblApellidos))
-								.addComponent(lblCp)
-								.addComponent(lblNewLabel)
-								.addComponent(lblNombre)
-								.addComponent(lblDni))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(textFieldDNI, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-								.addComponent(textFieldNombre, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-								.addComponent(textFieldDireccion, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-								.addComponent(textFieldApellidos, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-								.addComponent(textFieldCP, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-								.addComponent(textFieldEmail, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-								.addComponent(textFieldCargo, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-								.addComponent(textFieldContraseña, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-								.addComponent(textFieldNacimiento, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))
-							.addContainerGap())))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblEmpleado)
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textFieldDNI, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblDni))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNombre)
-						.addComponent(textFieldNombre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblApellidos)
-						.addComponent(textFieldApellidos, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblDireccion)
-						.addComponent(textFieldDireccion, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblCp)
-						.addComponent(textFieldCP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel)
-						.addComponent(textFieldEmail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNacimiento)
-						.addComponent(textFieldNacimiento, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblCargo)
-						.addComponent(textFieldCargo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblContrasea)
-						.addComponent(textFieldContraseña, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(74, Short.MAX_VALUE))
-		);
-		getContentPane().setLayout(groupLayout);
+		textFieldFecha = new JTextField();
+		
+		textFieldFecha.setColumns(10);
+		getContentPane().setLayout(new MigLayout("", "[83px][207px,grow][]", "[15px][19px][19px][19px][19px][19px][19px][19px][19px][19px][][][]"));
+		getContentPane().add(lblEmpleado, "cell 1 0,alignx left,aligny top");
+		getContentPane().add(lblContrasea, "cell 0 9,alignx trailing,aligny center");
+		getContentPane().add(lblNacimiento, "cell 0 7,alignx left,aligny center");
+		getContentPane().add(lblCargo, "cell 0 8,alignx left,aligny center");
+		getContentPane().add(lblDireccion, "cell 0 4,alignx left,aligny center");
+		getContentPane().add(lblApellidos, "cell 0 3,alignx left,aligny center");
+		getContentPane().add(lblCp, "cell 0 5,alignx left,aligny bottom");
+		getContentPane().add(lblNewLabel, "cell 0 6,alignx left,aligny center");
+		getContentPane().add(lblNombre, "cell 0 2,alignx left,aligny center");
+		getContentPane().add(lblDni, "cell 0 1,alignx left,aligny center");
+		getContentPane().add(textFieldDNI, "cell 1 1,growx,aligny top");
+		getContentPane().add(textFieldNombre, "cell 1 2,growx,aligny top");
+		getContentPane().add(textFieldDireccion, "cell 1 4,growx,aligny top");
+		getContentPane().add(textFieldApellidos, "cell 1 3,growx,aligny top");
+		getContentPane().add(textFieldCP, "cell 1 5,growx,aligny top");
+		getContentPane().add(textFieldEmail, "cell 1 6,growx,aligny top");
+		getContentPane().add(textFieldCargo, "cell 1 8,growx,aligny top");
+		getContentPane().add(datePicker, "cell 1 7,growx,aligny top");
+		
+		passwordField = new JPasswordField();
+		getContentPane().add(passwordField, "cell 1 9,growx");
+		
+		btnAdd = new JButton("Add");
+		getContentPane().add(btnAdd, "cell 2 12");
 
 	}
+
+	public JTextField getTextFieldDNI() {
+		return textFieldDNI;
+	}
+
+	public JTextField getTextFieldNombre() {
+		return textFieldNombre;
+	}
+
+	public JTextField getTextFieldApellidos() {
+		return textFieldApellidos;
+	}
+
+	public JTextField getTextFieldDireccion() {
+		return textFieldDireccion;
+	}
+
+	public JTextField getTextFieldCP() {
+		return textFieldCP;
+	}
+
+	public JTextField getTextFieldEmail() {
+		return textFieldEmail;
+	}
+
+	public JTextField getTextFieldCargo() {
+		return textFieldCargo;
+	}
+
+
+	public WebDateField getDatePicker() {
+		return datePicker;
+	}
+
+	public JTextField getTextFieldFecha() {
+		return textFieldFecha;
+	}
+
+	public JPasswordField getPasswordField() {
+		return passwordField;
+	}
+
+	public JButton getBtnAdd() {
+		return btnAdd;
+	}
+	
+	
+	
+	
+
+
+	
 }

@@ -33,9 +33,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 
 			while (rs.next()) {
 
-				empleado = new Empleado(rs.getInt("idEmpleado"), rs.getString("DNI"), rs.getString("NOMBRE"),
-						rs.getString("APELLIDOS"), rs.getString("CP"), rs.getString("EMAIL"), rs.getDate("FECHANAC"),
-						rs.getString("CARGO"), rs.getString("DOMICILIO"), rs.getString("PASSWORD"));
+				empleado = new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"), rs.getString("APELLIDOS"),
+						rs.getString("CP"), rs.getString("EMAIL"), rs.getDate("FECHANAC"), rs.getString("CARGO"),
+						rs.getString("DOMICILIO"), rs.getString("PASSWORD"));
 
 				empleados.add(empleado);
 
@@ -65,72 +65,69 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 
 	@Override
 	public ArrayList<Empleado> getEmpleadosPorCargo(String cargo) {
-		
+
 		return getCustomEmpleados("CARGO='" + cargo + "'");
 	}
 
 	@Override
 	public Empleado getEmpleadoPorDNI(String dni) {
-		
+
 		ArrayList<Empleado> empleados = getCustomEmpleados("DNI='" + dni + "'");
-		
+
 		if (empleados.size() == 0)
 			return null;
 		else
 			return empleados.get(0);
 	}
-	
+
 	@Override
 	public boolean insertaEmpleado(Empleado empleado) {
 		
-		boolean actualizado = false;
+		DataSource ds = MyDataSource.getOracleDataSource(); 
 		
-		DataSource ds = MyDataSource.getOracleDataSource();
-		
+		boolean b = false;
+
 		try (Connection con = ds.getConnection(); Statement stmt = con.createStatement();) {
-
-			String query = "INSERT INTO EMPLEADO values() nombre='" + empleado.getNombre() + "', " + 
-												"apellidos='" + empleado.getApellidos() + "'," + 
-												((empleado.getDomicilio() != null) ? "domicilio='" + empleado.getDomicilio() + "'," : "") + 
-												((empleado.getCp() != null) ? "CP='" + empleado.getCp() + "'," : "") + 
-												"email='" + empleado.getEmail() + "'," + 
-												"fechaNac=TO_DATE('" + empleado.getFecha()+"','yyyy-mm-dd')" + "," + 
-												"cargo='" + empleado.getCargo() + "' " + 
-												"WHERE DNI='" + empleado.getDNI() + "'";
-			
-			System.out.println(query);
-
-			if (stmt.executeUpdate(query) == 1)
-				actualizado = true;
-
+			String query = "INSERT INTO EMPLEADO(dni,nombre,apellidos"
+					+ ((empleado.getDomicilio() != null) ? ",domicilio" : "")
+					+ ((empleado.getCp() != null) ? ",cp" : "") + ",email,fechaNac,cargo,password) values('"
+					+ empleado.getDNI() + "','" + empleado.getNombre() + "','" + empleado.getApellidos() + "',"
+					+ ((empleado.getDomicilio() != null) ? "'" + empleado.getDomicilio() + "'," : "")
+					+ ((empleado.getCp() != null) ? "'" + empleado.getCp() + "'," : "") + "'" + empleado.getEmail()
+					+ "'," + "TO_DATE('" + empleado.getFecha() + "','yyyy-mm-dd'),'" + empleado.getCargo() + "',"
+					+ "ENCRYPT_PASWD.encrypt_val('" + empleado.getPassword() + "'))";
+			;
+			int i = stmt.executeUpdate(query);
+			if (i != 0) {
+				b = true;
+			}
 		} catch (SQLException e) {
-
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-
 		}
-		
-		return false;
+
+		return b;
 	}
 
 	@Override
 	public boolean deleteEmpleado(String dni) {
-		
+
 		boolean b = false;
-		
+
 		DataSource ds = MyDataSource.getOracleDataSource();
-		
+
 		String query = "delete from EMPLEADO where dni= ?";
-		
-		try (Connection con = ds.getConnection(); PreparedStatement stmt =con.prepareStatement(query);) {
 
-		stmt.setString(1, dni);
+		try (Connection con = ds.getConnection(); PreparedStatement stmt = con.prepareStatement(query);) {
 
-		if (stmt.executeUpdate() == 1)
-		b = true;
+			stmt.setString(1, dni);
+
+			if (stmt.executeUpdate() == 1)
+				b = true;
 
 		} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return b;
@@ -156,13 +153,13 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 				valido = true;
 
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 
 		return valido;
 	}
-	
+
 //	public boolean addCustomer (Customer customer) throws SQLException{
 //		boolean added = false;
 //		
@@ -187,15 +184,13 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 
 		try (Connection con = ds.getConnection(); Statement stmt = con.createStatement();) {
 
-			String query = "UPDATE EMPLEADO SET nombre='" + empleado.getNombre() + "', " + 
-												"apellidos='" + empleado.getApellidos() + "'," + 
-												((empleado.getDomicilio() != null) ? "domicilio='" + empleado.getDomicilio() + "'," : "") + 
-												((empleado.getCp() != null) ? "CP='" + empleado.getCp() + "'," : "") + 
-												"email='" + empleado.getEmail() + "'," + 
-												"fechaNac=TO_DATE('" + empleado.getFecha()+"','yyyy-mm-dd')" + "," + 
-												"cargo='" + empleado.getCargo() + "' " + 
-												"WHERE DNI='" + empleado.getDNI() + "'";
-			
+			String query = "UPDATE EMPLEADO SET nombre='" + empleado.getNombre() + "', " + "apellidos='"
+					+ empleado.getApellidos() + "',"
+					+ ((empleado.getDomicilio() != null) ? "domicilio='" + empleado.getDomicilio() + "'," : "")
+					+ ((empleado.getCp() != null) ? "CP='" + empleado.getCp() + "'," : "") + "email='"
+					+ empleado.getEmail() + "'," + "fechaNac=TO_DATE('" + empleado.getFecha() + "','yyyy-mm-dd')" + ","
+					+ "cargo='" + empleado.getCargo() + "' " + "WHERE DNI='" + empleado.getDNI() + "'";
+
 			System.out.println(query);
 
 			if (stmt.executeUpdate(query) == 1)

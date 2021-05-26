@@ -6,6 +6,7 @@ import com.alee.laf.WebLookAndFeel;
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.MyOracleDataBase;
 import com.mordor.mordorlloguer.controladores.ControladorPrincipal;
+import com.mordor.mordorlloguer.vistas.FrameEmpleados;
 import com.mordor.mordorlloguer.vistas.VistaPrincipal;
 
 public class App {

@@ -349,6 +349,12 @@ public class FrameEmpleados extends JInternalFrame implements TableModelListener
 			Collections.sort(data, comparator);
 			this.fireTableDataChanged();
 		}
+		
+		public void setNewData(List<T> data) {
+			this.data = data;
+			
+			this.fireTableDataChanged();
+		}
 
 	}
 	

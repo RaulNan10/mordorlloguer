@@ -15,10 +15,9 @@ public class Empleado {
 	private  String domicilio;
 	private  String password;
 	
-	public Empleado(int idEmpleado, String dNI, String nombre, String apellidos, String cp, String email, Date fecha,
+	public Empleado(String dNI, String nombre, String apellidos, String cp, String email, Date fecha,
 			String cargo, String domicilio, String password) {
 		super();
-		this.idEmpleado = idEmpleado;
 		DNI = dNI;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
@@ -28,14 +27,6 @@ public class Empleado {
 		this.cargo = cargo;
 		this.domicilio = domicilio;
 		this.password = password;
-	}
-
-	public int getIdEmpleado() {
-		return idEmpleado;
-	}
-
-	public void setIdEmpleado(int idEmpleado) {
-		this.idEmpleado = idEmpleado;
 	}
 
 	public String getDNI() {
