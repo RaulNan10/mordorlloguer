@@ -18,6 +18,7 @@ import javax.swing.SwingWorker;
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.MyOracleDataBase;
 import com.mordor.mordorlloguer.vistas.FrameEmpleados;
+import com.mordor.mordorlloguer.vistas.VistaClientes;
 import com.mordor.mordorlloguer.vistas.VistaLogin;
 import com.mordor.mordorlloguer.vistas.VistaPreferencias;
 import com.mordor.mordorlloguer.vistas.VistaPrincipal;
@@ -31,6 +32,8 @@ public class ControladorPrincipal implements ActionListener {
 	private VistaPreferencias vistaPreferencias;
 	private FrameEmpleados frameEmpleados;
 	private ControladorEmpleados cEmpleados;
+	private ControladorClientes cClientes;
+	private VistaClientes vistaClientes;
 
 	public ControladorPrincipal(VistaPrincipal vista, AlmacenDatosDB modelo) {
 		super();
@@ -49,6 +52,10 @@ public class ControladorPrincipal implements ActionListener {
 
 		cEmpleados = new ControladorEmpleados(frameEmpleados);
 
+		vistaClientes = new VistaClientes();
+
+		cClientes = new ControladorClientes(vistaClientes, modelo);
+
 		inicializar();
 
 	}
@@ -62,10 +69,12 @@ public class ControladorPrincipal implements ActionListener {
 		vista.getMntmPreferences().addActionListener(this);
 		vistaPreferencias.getBtnSave().addActionListener(this);
 		vistaPreferencias.getBtnCancel().addActionListener(this);
+		vista.getBtnClientes().addActionListener(this);
 
 		vista.getBtnEmpleado().setActionCommand("empleados");
 		vista.getBtnLogin().setActionCommand("login");
 		vista.getBtnLogout().setActionCommand("logout");
+		vista.getBtnClientes().setActionCommand("clientes");
 		vistaLogin.getBtnLogin().setActionCommand("inicioSesion");
 		vista.getMntmPreferences().setActionCommand("preferences");
 		vistaPreferencias.getBtnSave().setActionCommand("SaveProperties");
@@ -109,6 +118,8 @@ public class ControladorPrincipal implements ActionListener {
 			saveProperties();
 		} else if (comando.equals("Cancel properties")) {
 			cancelProperties();
+		} else if (comando.equals("clientes")) {
+			addJInternalFrame(vistaClientes);
 		}
 
 	}

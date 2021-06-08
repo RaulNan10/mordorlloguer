@@ -1,13 +1,17 @@
 package com.mordor.mordorLloguer.model;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.sql.DataSource;
+
+import com.mordor.mordorlloguer.controladores.ControladorPrincipal;
 
 public class MyOracleDataBase implements AlmacenDatosDB {
 
@@ -82,9 +86,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 
 	@Override
 	public boolean insertaEmpleado(Empleado empleado) {
-		
-		DataSource ds = MyDataSource.getOracleDataSource(); 
-		
+
+		DataSource ds = MyDataSource.getOracleDataSource();
+
 		boolean b = false;
 
 		try (Connection con = ds.getConnection(); Statement stmt = con.createStatement();) {
@@ -160,21 +164,6 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		return valido;
 	}
 
-//	public boolean addCustomer (Customer customer) throws SQLException{
-//		boolean added = false;
-//		
-//		DataSource ds = MyDataSource.getOracleDataSource();
-//		
-//		String query = "{ call GESTIONALQUILER.grabarCliente(?,?,?,?,?,?)}";
-//		
-//		try (Connection con = ds.getConnection(); CallableStatement cstmt = con.prepareCall(query);){
-//			
-//			int pos = 0;
-//			
-//			
-//		}
-//	}
-
 	@Override
 	public boolean updateEmpleado(Empleado empleado) {
 
@@ -202,6 +191,99 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 
 		}
 		return actualizado;
+	}
+
+	@Override
+	public boolean insertaCliente(Cliente customer) throws SQLException {
+
+		System.out.println(customer);
+
+		boolean added = false;
+
+		DataSource ds = MyDataSource.getOracleDataSource();
+
+		String query = "{ call GESTIONALQUILER.grabarCliente(?,?,?,?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection();
+
+				CallableStatement cstmt = con.prepareCall(query);) {
+
+			int pos = 0;
+
+			cstmt.setString(++pos, customer.getDni());
+
+			cstmt.setString(++pos, customer.getNombre());
+
+			cstmt.setString(++pos, customer.getApellidos());
+
+			cstmt.setString(++pos, customer.getEmail());
+
+			cstmt.setDate(++pos, customer.getFechaNac());
+
+			cstmt.setString(++pos, String.valueOf(customer.getCarnet()));
+
+			cstmt.setString(++pos, customer.getDomicilio());
+
+			cstmt.setString(++pos, customer.getCp());
+
+			cstmt.setBytes(++pos, customer.getFoto());
+
+			added = (cstmt.executeUpdate() == 1) ? true : false;
+
+		}
+
+		return added;
+
+	}
+	@Override
+	public boolean deleteCliente(String dni) {
+
+		DataSource ds = MyDataSource.getOracleDataSource();
+
+		Boolean borrado = false;
+
+		String query = "{call GESTIONALQUILER.bajaCliente(?)}";
+
+		try (Connection con = ds.getConnection(); CallableStatement cstmt = con.prepareCall(query);) {
+
+			borrado = cstmt.executeUpdate()==1;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return borrado;
+
+	}
+
+	@Override
+	public ArrayList<Cliente> getClientes() {
+
+		DataSource ds = MyDataSource.getOracleDataSource();
+
+		String query = "SELECT * FROM CLIENTE";
+
+		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+
+		try (Connection con = ds.getConnection();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(query)) {
+
+			Cliente cliente;
+			while (rs.next()) {
+				cliente = new Cliente(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
+						rs.getString("domicilio"), rs.getString("cp"), rs.getString("email"), rs.getDate("fechanac"),
+						rs.getString("carnet"), rs.getBytes("foto"));
+
+				clientes.add(cliente);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return clientes;
 	}
 
 }

@@ -33,6 +33,7 @@ public class VistaPrincipal extends JFrame {
 	private JDesktopPane desktopPane;
 	private VistaLogin vistaLogin;
 	private JMenuItem mntmPreferences;
+	private JButton btnClientes;
 
 	/**
 	 * Launch the application.
@@ -128,6 +129,10 @@ public class VistaPrincipal extends JFrame {
 		
 		
 		toolBar.add(btnEmpleado);
+		
+		btnClientes = new JButton("");
+		btnClientes.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorlloguer/assets/cliente.png")));
+		toolBar.add(btnClientes);
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -158,6 +163,13 @@ public class VistaPrincipal extends JFrame {
 	public JMenuItem getMntmPreferences() {
 		return mntmPreferences;
 	}
+
+	public JButton getBtnClientes() {
+		return btnClientes;
+	}
+	
+	
+	
 	
 	
 }

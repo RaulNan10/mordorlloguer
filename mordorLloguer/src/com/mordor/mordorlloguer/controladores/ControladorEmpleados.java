@@ -14,9 +14,9 @@ import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.ComparatorEmpleadoCP;
 import com.mordor.mordorLloguer.model.ComparatorEmpleadoDomicilio;
 import com.mordor.mordorLloguer.model.Empleado;
+import com.mordor.mordorLloguer.model.MyEmployeeTableModel;
 import com.mordor.mordorLloguer.model.MyOracleDataBase;
 import com.mordor.mordorlloguer.vistas.FrameEmpleados;
-import com.mordor.mordorlloguer.vistas.FrameEmpleados.MyEmployeeTableModel;
 import com.mordor.mordorlloguer.vistas.VistaAnyadirEmpleado;
 
 public class ControladorEmpleados implements ActionListener {
@@ -79,7 +79,7 @@ public class ControladorEmpleados implements ActionListener {
 				JOptionPane.showMessageDialog(vista, "Selecciona un solo empleado", "Error", JOptionPane.ERROR_MESSAGE);
 
 		} else if (comando.equals("Delete")) {
-				
+
 			delete(vista.getTable().getSelectedRows());
 
 		} else if (comando.equals("Close")) {
@@ -229,49 +229,55 @@ public class ControladorEmpleados implements ActionListener {
 		String apellidos = vistaAnyade.getTextFieldApellidos().getText();
 		String cp = vistaAnyade.getTextFieldCP().getText();
 		String email = vistaAnyade.getTextFieldEmail().getText();
-		Date fecha = ControladorPrincipal.convert(vistaAnyade.getDatePicker().getDate());
-		String cargo = vistaAnyade.getTextFieldCargo().getText();
-		String domicilio = vistaAnyade.getTextFieldDireccion().getText();
-		String contraseña = "";
 
-		for (char i : vistaAnyade.getPasswordField().getPassword())
-			contraseña += i;
-
-		if (dNI == "" || nombre == "" || apellidos == "" || email == "" || fecha == null || cargo == ""
-				|| domicilio == "" || contraseña == "")
+		if (vistaAnyade.getDatePicker().getDate() == null) {
 			JOptionPane.showMessageDialog(vistaAnyade, "Los campos que tienen un asterisco son obligatorios", "Erorr",
 					JOptionPane.ERROR_MESSAGE);
+		} else {
+			Date fecha = ControladorPrincipal.convert(vistaAnyade.getDatePicker().getDate());
+			String cargo = vistaAnyade.getTextFieldCargo().getText();
+			String domicilio = vistaAnyade.getTextFieldDireccion().getText();
+			String contraseña = "";
 
-		SwingWorker<Boolean, Void> task = new SwingWorker<Boolean, Void>() {
+			for (char i : vistaAnyade.getPasswordField().getPassword())
+				contraseña += i;
 
-			private Empleado e;
+			if (dNI == "" || nombre == "" || apellidos == "" || email == "" || fecha == null || cargo == ""
+					|| domicilio == "" || contraseña == "")
+				JOptionPane.showMessageDialog(vistaAnyade, "Los campos que tienen un asterisco son obligatorios",
+						"Erorr", JOptionPane.ERROR_MESSAGE);
 
-			boolean b;
+			SwingWorker<Boolean, Void> task = new SwingWorker<Boolean, Void>() {
 
-			@Override
-			protected Boolean doInBackground() throws Exception {
+				private Empleado e;
 
-				String contra = "";
+				boolean b;
 
-				for (char i : vistaAnyade.getPasswordField().getPassword())
-					contra += i;
+				@Override
+				protected Boolean doInBackground() throws Exception {
 
-				e = new Empleado(dNI, nombre, apellidos, cp, email, fecha, cargo, domicilio, contra);
+					String contra = "";
 
-				boolean b = modelo.insertaEmpleado(e);
+					for (char i : vistaAnyade.getPasswordField().getPassword())
+						contra += i;
 
-				MyEmployeeTableModel tabla = (MyEmployeeTableModel) vista.getTable().getModel();
+					e = new Empleado(dNI, nombre, apellidos, cp, email, fecha, cargo, domicilio, contra);
 
-				tabla.setNewData(modelo.getEmpleados());
+					boolean b = modelo.insertaEmpleado(e);
 
-				vista.getTable().setModel(tabla);
+					MyEmployeeTableModel tabla = (MyEmployeeTableModel) vista.getTable().getModel();
 
-				return b;
-			}
+					tabla.setNewData(modelo.getEmpleados());
 
-		};
+					vista.getTable().setModel(tabla);
 
-		task.execute();
+					return b;
+				}
+
+			};
+
+			task.execute();
+		}
 	}
 
 	private void ordenar(int campo, int asc) {

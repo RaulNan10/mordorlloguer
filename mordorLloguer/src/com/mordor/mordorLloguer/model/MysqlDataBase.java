@@ -37,7 +37,7 @@ public class MysqlDataBase implements AlmacenDatosDB {
 
 			while (rs.next()) {
 
-				empleado = new Empleado(rs.getInt("idEmpleado"), rs.getString("DNI"), rs.getString("nombre"),
+				empleado = new Empleado(rs.getString("DNI"), rs.getString("nombre"),
 						rs.getString("apellidos"), rs.getString("CP"), rs.getString("email"), rs.getDate("fechanac"),
 						rs.getString("cargo"), rs.getString("domicilio"), rs.getString("password"));
 
@@ -212,6 +212,24 @@ public class MysqlDataBase implements AlmacenDatosDB {
 
 	@Override
 	public boolean insertaEmpleado(Empleado empleado) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean insertaCliente(Cliente cliente) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ArrayList<Cliente> getClientes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteCliente(String dni) {
 		// TODO Auto-generated method stub
 		return false;
 	}
