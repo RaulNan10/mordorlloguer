@@ -9,16 +9,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import com.alee.laf.table.WebTable;
 import com.alee.laf.table.editors.WebDateEditor;
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.Cliente;
@@ -28,7 +33,7 @@ import com.mordor.mordorLloguer.model.MyOracleDataBase;
 import com.mordor.mordorlloguer.vistas.VistaAnyadirCliente;
 import com.mordor.mordorlloguer.vistas.VistaClientes;
 
-public class ControladorClientes implements ActionListener, TableModelListener {
+public class ControladorClientes implements ActionListener, TableModelListener, DocumentListener {
 
 	private VistaClientes vista;
 
@@ -42,9 +47,9 @@ public class ControladorClientes implements ActionListener, TableModelListener {
 
 		this.vista = vista;
 		this.modelo = modelo;
-		
+
 		vista = new VistaClientes();
-		
+
 		vistaAnyade = new VistaAnyadirCliente();
 
 		inicializar();
@@ -53,32 +58,50 @@ public class ControladorClientes implements ActionListener, TableModelListener {
 	private void inicializar() {
 
 		vista.getBtnAdd().addActionListener(this);
-		vista.getBtnCancel().addActionListener(this);
 		vista.getBtnDelete().addActionListener(this);
-		vista.getBtnEdit().addActionListener(this);
 		vista.getBtnImpresora().addActionListener(this);
 		vista.getTextFieldName().addActionListener(this);
 		vista.getTextFieldSurname().addActionListener(this);
 		vista.getComboBox().addActionListener(this);
 		vistaAnyade.getBtnAdd().addActionListener(this);
 		vistaAnyade.getBtnFoto().addActionListener(this);
+		vista.getComboBox().addActionListener(this);
+
+		vista.getComboBox().addItem("A");
+		vista.getComboBox().addItem("B");
+		vista.getComboBox().addItem("C");
+		vista.getComboBox().addItem("D");
+		vista.getComboBox().addItem("E");
+		vista.getComboBox().addItem("All");
+		vista.getComboBox().setSelectedItem("All");
+
+		vista.getTextFieldDNI().getDocument().addDocumentListener(this);
+		vista.getTextFieldName().getDocument().addDocumentListener(this);
+		vista.getTextFieldSurname().getDocument().addDocumentListener(this);
 
 		vista.getBtnAdd().setActionCommand("Añadir Cliente");
-		vista.getBtnCancel().setActionCommand("Cancelar");
 		vista.getBtnDelete().setActionCommand("Delete");
-		vista.getBtnEdit().setActionCommand("Edit");
 		vista.getBtnImpresora().setActionCommand("Impresora");
 		vistaAnyade.getBtnAdd().setActionCommand("Add");
 		vistaAnyade.getBtnFoto().setActionCommand("Foto");
+		vista.getComboBox().setActionCommand("COMBO");
 
 		ArrayList<Cliente> clientes = modelo.getClientes();
-
-		MyCustomerTableModel mtm = new MyCustomerTableModel(clientes);
 		
+		List<String> header = new ArrayList<String>();
+		header.add("DNI");
+		header.add("Nombre");
+		header.add("Apellidos");
+		header.add("Domicilio");
+		header.add("CP");
+		header.add("email");
+		header.add("fechaNac");
+		header.add("Carnet");
+		MyCustomerTableModel mtm = new MyCustomerTableModel(header,clientes);
+
 		mtm.addTableModelListener(this);
-		
-		SwingWorker<Boolean, Void> task = new SwingWorker <Boolean,Void>() {
 
+		SwingWorker<Boolean, Void> task = new SwingWorker<Boolean, Void>() {
 
 			@Override
 			protected Boolean doInBackground() throws Exception {
@@ -90,18 +113,20 @@ public class ControladorClientes implements ActionListener, TableModelListener {
 				for (Cliente c : clientes) {
 					mtm.add(c);
 				}
-				
+
 				return null;
 			}
-			
+
 		};
-		
+
 		task.execute();
-		
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+
+		JTable tabla = vista.getTable();
 
 		String comando = arg0.getActionCommand();
 
@@ -115,7 +140,7 @@ public class ControladorClientes implements ActionListener, TableModelListener {
 
 		} else if (comando.equals("Delete")) {
 
-			delete();
+			delete(tabla.getSelectedRows());
 
 		} else if (comando.equals("Edit")) {
 
@@ -132,7 +157,26 @@ public class ControladorClientes implements ActionListener, TableModelListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else if (comando.equals("COMBO")) {
+			filtroCBox();
 		}
+
+	}
+
+	private void filtroCBox() {
+
+		ArrayList<Cliente> clientes = modelo.getClientes();
+		MyCustomerTableModel mtm = (MyCustomerTableModel) vista.getTable().getModel();
+
+		List<Cliente> temp = clientes.stream()
+				.filter((a) -> a.getDni().toUpperCase().contains(vista.getTextFieldDNI().getText().toUpperCase()))
+				.filter((a) -> a.getApellidos().toUpperCase()
+						.contains(vista.getTextFieldSurname().getText().toUpperCase()))
+				.filter((a) -> a.getNombre().toUpperCase().contains(vista.getTextFieldName().getText().toUpperCase()))
+				.filter((a) -> a.getCarnet().toUpperCase().equals(vista.getComboBox().getSelectedItem())
+						|| vista.getComboBox().getSelectedItem().equals("All"))
+				.collect(Collectors.toList());
+		mtm.setNewData(temp);
 
 	}
 
@@ -180,7 +224,7 @@ public class ControladorClientes implements ActionListener, TableModelListener {
 				protected Boolean doInBackground() throws Exception {
 
 					insertado = modelo.insertaCliente(cliente);
-					
+
 					MyCustomerTableModel tabla = (MyCustomerTableModel) vista.getTable().getModel();
 
 					tabla.setNewData(modelo.getClientes());
@@ -250,27 +294,70 @@ public class ControladorClientes implements ActionListener, TableModelListener {
 
 	}
 
-	private void delete() {
-		
-		if(vista.getTable().getSelectedRowCount()==0) {
-			JOptionPane.showMessageDialog(vista, "Error", "Debe haber almenos una fila seleccionada", JOptionPane.ERROR_MESSAGE);
-		} else {
-			
-			int[] filas = vista.getTable().getSelectedRows();
-			ArrayList<Integer> filasList = new ArrayList<Integer>();
-			
-			JTable tabla = vista.getTable();
-			
-			for ( int i = 0 ; i < filas.length ; i++) {
-				
-				filasList.add(filas[i]);
-				
-				//modelo.deleteCliente(modelo.getClientes().remove(filasList.g));
-				
+	private void delete(int[] rows) {
+
+		JTable tabla = vista.getTable();
+
+		AlmacenDatosDB modelo = new MyOracleDataBase();
+
+		SwingWorker<Boolean, Void> task = new SwingWorker<Boolean, Void>() {
+
+			String dni;
+
+			Boolean eliminado = false;
+
+			int contador = 0;
+
+			@Override
+			protected Boolean doInBackground() throws Exception {
+
+				for (int i : rows) {
+
+					dni = (String.valueOf(tabla.getValueAt(i - contador, 0)));
+
+					eliminado = modelo.deleteCliente(dni);
+
+					MyCustomerTableModel mtm = (MyCustomerTableModel) vista.getTable().getModel();
+
+					if (eliminado == true) {
+
+						mtm.remove(dni);
+
+						contador++;
+
+					}
+
+				}
+
+				return eliminado;
 			}
-		
-		}
-			
+
+			protected void done() {
+				try {
+
+					if (get() == false) {
+
+						JOptionPane.showMessageDialog(vista, "Error eliminando cliente(s)", "Error",
+								JOptionPane.ERROR_MESSAGE);
+
+					} else
+
+						JOptionPane.showMessageDialog(vista, "Cliente(s) eliminados correctamente", "Hecho",
+								JOptionPane.INFORMATION_MESSAGE);
+
+				} catch (InterruptedException e) {
+
+					e.printStackTrace();
+
+				} catch (ExecutionException e) {
+
+					e.printStackTrace();
+
+				}
+			}
+
+		};
+		task.execute();
 
 	}
 
@@ -288,6 +375,57 @@ public class ControladorClientes implements ActionListener, TableModelListener {
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent arg0) {
+		ArrayList<Cliente> clientes = modelo.getClientes();
+		MyCustomerTableModel mtm = (MyCustomerTableModel) vista.getTable().getModel();
+
+		List<Cliente> temp = clientes.stream()
+				.filter((a) -> a.getDni().toUpperCase().contains(vista.getTextFieldDNI().getText().toUpperCase()))
+				.filter((a) -> a.getApellidos().toUpperCase()
+						.contains(vista.getTextFieldSurname().getText().toUpperCase()))
+				.filter((a) -> a.getNombre().toUpperCase().contains(vista.getTextFieldName().getText().toUpperCase()))
+				.filter((a) -> a.getCarnet().toUpperCase().equals(vista.getComboBox().getSelectedItem())
+						|| vista.getComboBox().getSelectedItem().equals("All"))
+				.collect(Collectors.toList());
+		mtm.setNewData(temp);
+
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent arg0) {
+		ArrayList<Cliente> clientes = modelo.getClientes();
+		MyCustomerTableModel mtm = (MyCustomerTableModel) vista.getTable().getModel();
+
+		List<Cliente> temp = clientes.stream()
+				.filter((a) -> a.getDni().toUpperCase().contains(vista.getTextFieldDNI().getText().toUpperCase()))
+				.filter((a) -> a.getApellidos().toUpperCase()
+						.contains(vista.getTextFieldSurname().getText().toUpperCase()))
+				.filter((a) -> a.getNombre().toUpperCase().contains(vista.getTextFieldName().getText().toUpperCase()))
+				.filter((a) -> a.getCarnet().toUpperCase().equals(vista.getComboBox().getSelectedItem())
+						|| vista.getComboBox().getSelectedItem().equals("All"))
+				.collect(Collectors.toList());
+		mtm.setNewData(temp);
+
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent arg0) {
+		ArrayList<Cliente> clientes = modelo.getClientes();
+		MyCustomerTableModel mtm = (MyCustomerTableModel) vista.getTable().getModel();
+
+		List<Cliente> temp = clientes.stream()
+				.filter((a) -> a.getDni().toUpperCase().contains(vista.getTextFieldDNI().getText().toUpperCase()))
+				.filter((a) -> a.getApellidos().toUpperCase()
+						.contains(vista.getTextFieldSurname().getText().toUpperCase()))
+				.filter((a) -> a.getNombre().toUpperCase().contains(vista.getTextFieldName().getText().toUpperCase()))
+				.filter((a) -> a.getCarnet().toUpperCase().equals(vista.getComboBox().getSelectedItem())
+						|| vista.getComboBox().getSelectedItem().equals("All"))
+				.collect(Collectors.toList());
+		mtm.setNewData(temp);
 
 	}
 

@@ -3,6 +3,7 @@ package com.mordor.mordorLloguer.model;
 import java.awt.HeadlessException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,8 +11,8 @@ import javax.swing.JOptionPane;
 
 public class MyCustomerTableModel extends MyTableModel<Cliente> {
 
-	public MyCustomerTableModel(List<Cliente> data) {
-		super(new String[] { "DNI", "Nombre", "Apellidos", "Domicilio", "CP", "Email", "fechaNac", "Carnet" }, data);
+	public MyCustomerTableModel(List<String> header,List<Cliente> data) {
+		super(header, data);
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class MyCustomerTableModel extends MyTableModel<Cliente> {
 			data.get(rowIndex).setEmail(aValue.toString());
 			break;
 		case 6:
-			data.get(rowIndex).setFechaNac(new Date(((java.util.Date)aValue).getTime()));
+			data.get(rowIndex).setFechaNac(new Date(((java.util.Date) aValue).getTime()));
 			break;
 		case 7:
 			data.get(rowIndex).setCarnet(aValue.toString());

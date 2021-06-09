@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
+import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.concurrent.ExecutionException;
 
@@ -22,6 +23,7 @@ import com.mordor.mordorlloguer.vistas.VistaClientes;
 import com.mordor.mordorlloguer.vistas.VistaLogin;
 import com.mordor.mordorlloguer.vistas.VistaPreferencias;
 import com.mordor.mordorlloguer.vistas.VistaPrincipal;
+import com.mordor.mordorlloguer.vistas.VistaVehiculos;
 
 public class ControladorPrincipal implements ActionListener {
 
@@ -34,6 +36,8 @@ public class ControladorPrincipal implements ActionListener {
 	private ControladorEmpleados cEmpleados;
 	private ControladorClientes cClientes;
 	private VistaClientes vistaClientes;
+	private ControladorVehiculos controladorVehiculos;
+	private VistaVehiculos vistaVehiculos;
 
 	public ControladorPrincipal(VistaPrincipal vista, AlmacenDatosDB modelo) {
 		super();
@@ -70,6 +74,7 @@ public class ControladorPrincipal implements ActionListener {
 		vistaPreferencias.getBtnSave().addActionListener(this);
 		vistaPreferencias.getBtnCancel().addActionListener(this);
 		vista.getBtnClientes().addActionListener(this);
+		vista.getButtonVehicle().addActionListener(this);
 
 		vista.getBtnEmpleado().setActionCommand("empleados");
 		vista.getBtnLogin().setActionCommand("login");
@@ -79,6 +84,7 @@ public class ControladorPrincipal implements ActionListener {
 		vista.getMntmPreferences().setActionCommand("preferences");
 		vistaPreferencias.getBtnSave().setActionCommand("SaveProperties");
 		vistaPreferencias.getBtnCancel().setActionCommand("Cancel properties");
+		vista.getButtonVehicle().setActionCommand("Abrir vista vehiculos");
 
 	}
 
@@ -120,6 +126,17 @@ public class ControladorPrincipal implements ActionListener {
 			cancelProperties();
 		} else if (comando.equals("clientes")) {
 			addJInternalFrame(vistaClientes);
+		} else if(comando.equals("Abrir vista vehiculos")) {
+			try {
+				vistaVehiculos = new VistaVehiculos();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			controladorVehiculos = new ControladorVehiculos(vistaVehiculos, modelo);
+			addJInternalFrame(vistaVehiculos);
+
+			
 		}
 
 	}

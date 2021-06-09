@@ -1,4 +1,4 @@
-package com.mordor.mordorLloguer;
+ package com.mordor.mordorLloguer;
 
 import java.awt.EventQueue;
 

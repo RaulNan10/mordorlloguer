@@ -35,8 +35,6 @@ public class VistaClientes extends JInternalFrame implements TableModelListener 
 	private JTable table;
 	private JButton btnAdd;
 	private JButton btnDelete;
-	private JButton btnEdit;
-	private JButton btnCancel;
 	private MyTableModel mtm;
 	private AlmacenDatosDB modelo;
 
@@ -89,68 +87,70 @@ public class VistaClientes extends JInternalFrame implements TableModelListener 
 
 		JScrollPane scrollPane = new JScrollPane();
 
-		btnCancel = new JButton("Cancel");
-
-		btnEdit = new JButton("Edit");
-
 		btnDelete = new JButton("Delete");
 
 		btnAdd = new JButton("Add");
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.TRAILING).addGroup(groupLayout
-				.createSequentialGroup().addContainerGap()
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup().addComponent(lblCustomers).addGap(322))
-						.addGroup(groupLayout.createSequentialGroup().addGroup(groupLayout
-								.createParallelGroup(Alignment.LEADING)
-								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE)
-								.addGroup(groupLayout.createSequentialGroup().addComponent(lblDni)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(textFieldDNI, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblName)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(textFieldName, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblSurname)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(textFieldSurname, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblDrivingLicense)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnImpresora)))
-								.addContainerGap())
-						.addGroup(Alignment.TRAILING,
-								groupLayout.createSequentialGroup().addComponent(btnAdd)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnDelete)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnEdit)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnCancel)
-										.addContainerGap()))));
-		groupLayout
-				.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup().addContainerGap().addComponent(lblCustomers)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(lblDni)
-										.addComponent(textFieldDNI, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblName)
-										.addComponent(textFieldName, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblSurname)
-										.addComponent(textFieldSurname, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblDrivingLicense)
-										.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(btnImpresora))
-								.addGap(18)
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnCancel)
-										.addComponent(btnEdit).addComponent(btnDelete).addComponent(btnAdd))
-								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblCustomers)
+							.addGap(322))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 793, Short.MAX_VALUE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblDni)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(textFieldDNI, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblName)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(textFieldName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblSurname)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(textFieldSurname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblDrivingLicense)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnImpresora)))
+							.addContainerGap())
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnAdd)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnDelete)
+							.addGap(166))))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblCustomers)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblDni)
+						.addComponent(textFieldDNI, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblName)
+						.addComponent(textFieldName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSurname)
+						.addComponent(textFieldSurname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblDrivingLicense)
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnImpresora))
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnDelete)
+						.addComponent(btnAdd))
+					.addContainerGap(30, Short.MAX_VALUE))
+		);
 
 		table = new JTable();
 		scrollPane.setViewportView(table);
@@ -164,6 +164,11 @@ public class VistaClientes extends JInternalFrame implements TableModelListener 
 
 	public JButton getBtnImpresora() {
 		return btnImpresora;
+	}
+	
+
+	public JTextField getTextFieldDNI() {
+		return textFieldDNI;
 	}
 
 	public JTextField getTextFieldName() {
@@ -184,14 +189,6 @@ public class VistaClientes extends JInternalFrame implements TableModelListener 
 
 	public JButton getBtnDelete() {
 		return btnDelete;
-	}
-
-	public JButton getBtnEdit() {
-		return btnEdit;
-	}
-
-	public JButton getBtnCancel() {
-		return btnCancel;
 	}
 
 	@Override

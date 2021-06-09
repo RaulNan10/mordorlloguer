@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 
 public class MyEmployeeTableModel extends MyTableModel<Empleado> {
 
-	public MyEmployeeTableModel(String[] header, List<Empleado> data) {
+	public MyEmployeeTableModel(List<String> header, List<Empleado> data) {
 		super(header, data);
 	}
 
@@ -41,9 +41,9 @@ public class MyEmployeeTableModel extends MyTableModel<Empleado> {
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		
+
 		AlmacenDatosDB modelo = new MyOracleDataBase();
-		
+
 		switch (columnIndex) {
 
 		case 1:
@@ -67,7 +67,7 @@ public class MyEmployeeTableModel extends MyTableModel<Empleado> {
 			data.get(rowIndex).setCargo(aValue.toString());
 			modelo.updateEmpleado(data.get(rowIndex));
 		case 4:
-			
+
 			data.get(rowIndex).setDomicilio(aValue.toString());
 			modelo.updateEmpleado(data.get(rowIndex));
 		case 5:
@@ -75,12 +75,12 @@ public class MyEmployeeTableModel extends MyTableModel<Empleado> {
 		case 6:
 			java.util.Date date = (java.util.Date) aValue;
 			data.get(rowIndex).setFecha(new java.sql.Date(date.getTime()));
-			
+
 		case 7:
 			data.get(rowIndex).setCargo(aValue.toString());
 			break;
 		}
-		if(modelo.updateEmpleado(data.get(rowIndex))) {
+		if (modelo.updateEmpleado(data.get(rowIndex))) {
 			JOptionPane.showMessageDialog(null, "Empleado actualizado correctamente");
 		} else {
 			JOptionPane.showMessageDialog(null, "Error actualizando empleado", "Error", JOptionPane.ERROR_MESSAGE);

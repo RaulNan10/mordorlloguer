@@ -245,7 +245,10 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		String query = "{call GESTIONALQUILER.bajaCliente(?)}";
 
 		try (Connection con = ds.getConnection(); CallableStatement cstmt = con.prepareCall(query);) {
-
+			int pos = 0;
+			
+			cstmt.setString(++pos, dni);
+			
 			borrado = cstmt.executeUpdate()==1;
 
 		} catch (SQLException e) {

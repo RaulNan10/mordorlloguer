@@ -215,10 +215,19 @@ public class FrameEmpleados extends JInternalFrame implements TableModelListener
 		AlmacenDatosDB modelo = new MyOracleDataBase();
 
 		ArrayList<Empleado> empleados = modelo.getEmpleados();
-
-		mtm = new MyEmployeeTableModel(
-				new String[] { "DNI", "Nombre", "Apellidos", "Email", "Direccion", "CP", "Nacimiento", "Cargo" },
-				empleados);
+		
+		List<String> header = new ArrayList();
+		header.add("DNI");
+		header.add("Nombre");
+		header.add("Apellidos");
+		header.add("Email");
+		header.add("Direccion");
+		header.add("CP");
+		header.add("Nacimiento");
+		header.add("Cargo");
+												
+		
+		mtm = new MyEmployeeTableModel(header,empleados);
     
 		table.setModel(mtm);
 
